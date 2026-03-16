@@ -1,24 +1,27 @@
 <!doctype html>
 <html lang="es">
 <meta charset="utf-8">
-<title>MetaValor Lab · Demo Login con TikTok</title>
+<title>Demo Login TikTok</title>
 <main style="max-width:720px;margin:40px auto;font:16px/1.6 system-ui">
   <h1>Demo Login Kit (OAuth 2.0)</h1>
-  <p>Haz clic para continuar con TikTok. Serás redirigido a la página de consentimiento y volverás aquí con un
-    <code>code</code>.</p>
-  <a id="go" href="#"
-    style="padding:12px 16px;background:#000;color:#fff;border-radius:8px;text-decoration:none">Continuar con TikTok</a>
-  <script>
-    const clientKey = 'awaczt49hplr31zf'; // tu Client ID (client_key)
-    const redirectUri = encodeURIComponent('https://mullyn6.github.io/metavalorlab-legal/redirect.html'); // tu redirect registrada
-    const scope = encodeURIComponent('user.info.basic'); // mínimo para la demo
-    const state = Math.random().toString(36).slice(2);   // anti-CSRF demo
-
-    const authUrl = `https://www.tiktok.com/v2/auth/authorize/` +
-      `?client_key=${clientKey}&scope=${scope}&response_type=code&redirect_uri=${redirectUri}&state=${state}`;
-
-    document.getElementById('go').href = authUrl;
-  </script>
+  <button id="go" style="padding:10px 16px">Continuar con TikTok</button>
 </main>
+<script>
+  const clientKey = 'awaczt49hplr31zf';
+  const redirectUri = 'https://mullyn6.github.io/metavalorlab-legal/redirect.html'; // o .../redirect.html/
+  const scope = 'user.info.basic';
+  const state = crypto.getRandomValues(new Uint8Array(16))
+    .reduce((s, b) => s + ('0' + b.toString(16)).slice(-2), '');
+  const url = 'https://www.tiktok.com/v2/auth/authorize/'
+    + '?client_key=' + encodeURIComponent(clientKey)
+    + '&scope=' + encodeURIComponent(scope)
+    + '&response_type=code'
+    + '&redirect_uri=' + encodeURIComponent(redirectUri)
+    + '&state=' + encodeURIComponent(state);
+
+  document.getElementById('go').addEventListener('click', () => {
+    location.href = url; // evita &amp; en atributos href
+  });
+</script>
 
 </html>
